@@ -10,9 +10,24 @@ namespace Supermarket
     {
         static void Main(string[] args)
         {
-            DAL dal = new DAL();
-            dal.CreateProduct("Fanta",1200);
-            dal.ReadAllProducts();
+            Category category = new Category();
+           // DAL dAL = new DAL();
+            ProductService productService = new ProductService();
+            // category.ReadbyID(1);
+            // category.UpdateCategory(4, "Fruits");
+            // category.ReadAllCategory();
+            // category.DeleteCategory(3);
+            //  category.ReadbyName("bavarages");
+
+            //  dAL.ReadbyPrice(500);
+
+            //productService.CreateProduct("Aloe", 11000, 1);
+            // productService.ReadAllProducts();
+            //productService.ReadAllProducts();
+            // productService.ReadAllProducts();
+            productService.GetProductsByCategoryId(1);
+
         }
+
     }
 }
