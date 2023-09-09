@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Xml.Linq;
 
 namespace Supermarket
 {
@@ -129,13 +128,13 @@ namespace Supermarket
                      $" SET CategoryName = '{newName}'" +
                      $" WHERE Id = {id};";
 
-                DAL.ExecuteNonQuery(command);
+            DAL.ExecuteNonQuery(command);
         }
         public void DeleteCategory(int id)
         {
             string command = $"DELETE dbo.Category WHERE Id = {id}";
-            DAL.ExecuteNonQuery (command);  
-            
+            DAL.ExecuteNonQuery(command);
+
         }
         public void ReadbyName(string name)
         {
@@ -188,7 +187,7 @@ namespace Supermarket
 
 
         }
-        public void ReadbyCountProducts (int param)
+        public void ReadbyCountProducts(int param)
         {
             SqlConnection connection = new SqlConnection(
               "Data Source=DESKTOP-B7KIDHK\\SQLEXPRESS02;Initial Catalog=Supermarket;Integrated Security=True");
@@ -198,7 +197,7 @@ namespace Supermarket
                 connection.Open();
 
                 string command = "SELECT CategoryName, COUNT(*) AS ProductCount FROM dbo.Category c " +
-                                 "INNER JOIN dbo.Product p ON c.Id = p.categoryId " + 
+                                 "INNER JOIN dbo.Product p ON c.Id = p.categoryId " +
                                  $"GROUP BY CategoryName HAVING COUNT(*) > {param};";
 
 
@@ -242,7 +241,7 @@ namespace Supermarket
         }
 
 
-        
+
 
     }
 }

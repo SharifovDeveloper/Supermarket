@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Supermarket
 {
@@ -47,7 +42,7 @@ namespace Supermarket
                 if (reader.HasRows) // Agarda keyingi qator bo'lsa true aks xolda false
                 {
                     // Ustunlarni nomlari
-                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2),reader.GetName(3));
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2), reader.GetName(3));
 
                     // Keyingi qatorga o'tishga urunib ko'radi
                     // o'ta olsa true aks xolda false
@@ -58,7 +53,7 @@ namespace Supermarket
                         object price = reader.GetValue(2);
                         object catergoryId = reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price,catergoryId);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price, catergoryId);
                     }
                     Console.WriteLine("Reading finished");
                     reader.Close();
@@ -102,7 +97,7 @@ namespace Supermarket
 
                 if (reader.HasRows)
                 {
-                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2),reader.GetName(3));
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2), reader.GetName(3));
 
                     while (reader.Read())
                     {
@@ -110,7 +105,7 @@ namespace Supermarket
                         object price = reader.GetValue(2);
                         object categoryId = reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price,categoryId);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price, categoryId);
                     }
                     Console.WriteLine("Reading finished");
                     reader.Close();
@@ -195,7 +190,7 @@ namespace Supermarket
                     $" WHERE Id = {id};";
 
             DAL.ExecuteNonQuery(command);
-            
+
         }
 
         public void DeleteProduct(int id)
@@ -203,7 +198,7 @@ namespace Supermarket
             string command = $"DELETE dbo.Product WHERE Id = {id}";
 
             DAL.ExecuteNonQuery(command);
-            
+
         }
         public void ReadbyName(string name)
         {
@@ -224,15 +219,15 @@ namespace Supermarket
 
                 if (reader.HasRows)
                 {
-                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2),reader.GetName(3));
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2), reader.GetName(3));
 
                     while (reader.Read())
                     {
                         object id = reader.GetValue(0);
                         object price = reader.GetValue(2);
-                        object categoryId=reader.GetValue(3);
+                        object categoryId = reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price,categoryId);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price, categoryId);
                     }
                     Console.WriteLine("Reading finished");
                     reader.Close();
@@ -282,7 +277,7 @@ namespace Supermarket
                         object name = reader.GetValue(1);
                         object categoryId = reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name,price, categoryId);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price, categoryId);
                     }
                 }
             }

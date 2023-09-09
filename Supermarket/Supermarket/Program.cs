@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Supermarket
+﻿namespace Supermarket
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             Category category = new Category();
-           // DAL dAL = new DAL();
+            // DAL dAL = new DAL();
             ProductService productService = new ProductService();
             // category.ReadbyID(1);
             // category.UpdateCategory(4, "Fruits");
