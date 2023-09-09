@@ -25,7 +25,10 @@ namespace Supermarket
             // productService.ReadAllProducts();
             //productService.ReadAllProducts();
             // productService.ReadAllProducts();
-            productService.GetProductsByCategoryId(1);
+            //  productService.GetProductsByCategoryId(1);
+            //category.ReadbyCountProducts(2);
+            // productService.ReadbyPrice(10000);
+            productService.ReadbyName("aloe");
 
         }
 

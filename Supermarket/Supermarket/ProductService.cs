@@ -102,14 +102,15 @@ namespace Supermarket
 
                 if (reader.HasRows)
                 {
-                    Console.WriteLine("{0}\t{1}\t{2}", reader.GetName(0), reader.GetName(1), reader.GetName(2));
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2),reader.GetName(3));
 
                     while (reader.Read())
                     {
                         object name = reader.GetValue(1);
                         object price = reader.GetValue(2);
+                        object categoryId = reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} \t{2}", id, name, price);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price,categoryId);
                     }
                     Console.WriteLine("Reading finished");
                     reader.Close();
@@ -189,70 +190,20 @@ namespace Supermarket
 
         public void UpdateProduct(int id, string newName, decimal newPrice)
         {
-            SqlConnection connection = new SqlConnection(
-                "Data Source=EPUZTASW0537\\SQLEXPRESS;Initial Catalog=Supermarket;Integrated Security=True");
-
-            try
-            {
-                connection.Open();
-
-                Console.WriteLine("Connection was successfull.");
-
-                string command = $"UPDATE dbo.Product" +
+            string command = $"UPDATE dbo.Product" +
                     $" SET ProductName = '{newName}', Price = {newPrice}" +
                     $" WHERE Id = {id};";
-                SqlCommand sqlCommand = new SqlCommand(command, connection);
 
-                int affectedRows = sqlCommand.ExecuteNonQuery();
-
-                Console.WriteLine($"Number of rows affected: {affectedRows}");
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine($"There was an error executing SQL command... {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Something went wrong. {ex.Message}");
-            }
-            finally
-            {
-                connection.Close();
-                Console.WriteLine("Connection closed.");
-            }
+            DAL.ExecuteNonQuery(command);
+            
         }
 
         public void DeleteProduct(int id)
         {
-            SqlConnection connection = new SqlConnection(
-                "Data Source=EPUZTASW0537\\SQLEXPRESS;Initial Catalog=Supermarket;Integrated Security=True");
+            string command = $"DELETE dbo.Product WHERE Id = {id}";
 
-            try
-            {
-                connection.Open();
-
-                Console.WriteLine("Connection was successfull.");
-
-                string command = $"DELETE dbo.Product WHERE Id = {id}";
-                SqlCommand sqlCommand = new SqlCommand(command, connection);
-
-                int affectedRows = sqlCommand.ExecuteNonQuery();
-
-                Console.WriteLine($"Number of rows affected: {affectedRows}");
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine($"There was an error executing SQL command... {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Something went wrong. {ex.Message}");
-            }
-            finally
-            {
-                connection.Close();
-                Console.WriteLine("Connection closed.");
-            }
+            DAL.ExecuteNonQuery(command);
+            
         }
         public void ReadbyName(string name)
         {
@@ -273,14 +224,15 @@ namespace Supermarket
 
                 if (reader.HasRows)
                 {
-                    Console.WriteLine("{0}\t{1}\t{2}", reader.GetName(0), reader.GetName(1), reader.GetName(2));
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2),reader.GetName(3));
 
                     while (reader.Read())
                     {
                         object id = reader.GetValue(0);
                         object price = reader.GetValue(2);
+                        object categoryId=reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} \t{2}", id, name, price);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name, price,categoryId);
                     }
                     Console.WriteLine("Reading finished");
                     reader.Close();
@@ -312,7 +264,7 @@ namespace Supermarket
             {
                 connection.Open();
 
-                string command = "SELECT ProductName,Price FROM dbo.Product" +
+                string command = "SELECT * FROM dbo.Product" +
                     $" WHERE Price > '{price}';";
 
                 SqlCommand sqlCommand = connection.CreateCommand();
@@ -322,19 +274,16 @@ namespace Supermarket
 
                 if (reader.HasRows)
                 {
-                    Console.WriteLine("{0}\t{1}", reader.GetName(0), reader.GetName(1));
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetName(0), reader.GetName(1), reader.GetName(2), reader.GetName(3));
 
                     while (reader.Read())
                     {
                         object id = reader.GetValue(0);
-                        object productName = reader.GetValue(1);
+                        object name = reader.GetValue(1);
+                        object categoryId = reader.GetValue(3);
 
-                        Console.WriteLine("{0} \t{1} ", id, productName);
+                        Console.WriteLine("{0} \t{1} \t{2}\t{3}", id, name,price, categoryId);
                     }
-                    Console.WriteLine("Reading finished");
-                    reader.Close();
-
-                    Console.WriteLine("Reader disposed.");
                 }
             }
             catch (SqlException ex)
