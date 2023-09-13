@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            Category category = new Category();
+            CategoryDbService category = new Category();
             // DAL dAL = new DAL();
             ProductService productService = new ProductService();
             // category.ReadbyID(1);
