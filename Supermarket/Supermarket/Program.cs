@@ -4,10 +4,12 @@
     {
         static void Main(string[] args)
         {
-            CategoryDbService category = new Category();
+            CategoryDbService category = new CategoryDbService();
             // DAL dAL = new DAL();
-            ProductService productService = new ProductService();
-            // category.ReadbyID(1);
+            ProductDbService productService = new ProductDbService();
+            //     category.ReadAllCategory();
+            category.ReadbyID(2);
+            
             // category.UpdateCategory(4, "Fruits");
             // category.ReadAllCategory();
             // category.DeleteCategory(3);
@@ -22,7 +24,7 @@
             //  productService.GetProductsByCategoryId(1);
             //category.ReadbyCountProducts(2);
             // productService.ReadbyPrice(10000);
-            productService.ReadbyName("aloe");
+          //  productService.ReadbyName("aloe");
 
         }
 

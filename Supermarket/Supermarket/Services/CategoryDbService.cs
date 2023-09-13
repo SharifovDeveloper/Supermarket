@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Supermarket.Models;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Xml.Linq;
 
 namespace Supermarket
 {
-    internal class Category
+    internal class CategoryDbService
     {
+
+
         public void CreateCategory(string categoryName)
         {
             // CRUD operations
@@ -19,64 +22,24 @@ namespace Supermarket
             // ReadByPrice > 500
 
             string command = $"INSERT INTO dbo.Category (categoryName) VALUES ('{categoryName}')";
-            DAL.ExecuteNonQuery(command);
+            DataAccessLayer.ExecuteNonQuery(command);
 
         }
-       
+
         public void ReadAllCategory()
         {
-            string command = "SELECT * FROM dbo.Category";
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(DAL.Connection_String))
-                {
-                    connection.Open();
+            string query = "SELECT * FROM dbo.Category;";
 
-                    SqlCommand sqlCommand = new SqlCommand(command, connection);
-
-                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
-                    {
-                        ReadCategorysFromDataReader(reader);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine($"Database error: {ex.Message}.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Something went wrong while reading products. {ex.Message}.");
-            }
+            ExecuteQuery(query);
 
         }
-        
+
         public void ReadbyID(int id)
         {
-            string command = "SELECT * FROM dbo.Category" +
-                        $" WHERE Id = {id};";
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(DAL.Connection_String))
-                {
-                    connection.Open();
+            string query = "SELECT * FROM dbo.Category" +
+                 $" WHERE Id = {id};";
 
-                    SqlCommand sqlCommand = new SqlCommand(command, connection);
-
-                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
-                    {
-                        ReadCategorysFromDataReader(reader);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine($"Database error: {ex.Message}.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Something went wrong while reading products. {ex.Message}.");
-            }
+            ExecuteQuery(query);
         }
         public void UpdateCategory(int id, string newName)
         {
@@ -84,63 +47,43 @@ namespace Supermarket
                      $" SET CategoryName = '{newName}'" +
                      $" WHERE Id = {id};";
 
-            DAL.ExecuteNonQuery(command);
+            DataAccessLayer.ExecuteNonQuery(command);
         }
         public void DeleteCategory(int id)
         {
             string command = $"DELETE dbo.Category WHERE Id = {id}";
-            DAL.ExecuteNonQuery(command);
+            DataAccessLayer.ExecuteNonQuery(command);
 
         }
-       
+
         public void ReadbyName(string name)
 
         {
-            string command = "SELECT * FROM dbo.Category" +
+            string query = "SELECT * FROM dbo.Category" +
                       $" WHERE CategoryName = '{name}';";
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(DAL.Connection_String))
-                {
-                    connection.Open();
-
-                    SqlCommand sqlCommand = new SqlCommand(command, connection);
-
-                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
-                    {
-                        ReadCategorysFromDataReader(reader);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine($"Database error: {ex.Message}.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Something went wrong while reading products. {ex.Message}.");
-            }
-
+            ExecuteQuery(query);
 
         }
-      
+
         public void ReadbyCountProducts(int param)
         {
-            string command = "SELECT CategoryName, COUNT(*) AS ProductCount FROM dbo.Category c " +
+            string query = "SELECT CategoryName, COUNT(*) AS ProductCount FROM dbo.Category c " +
                                     "INNER JOIN dbo.Product p ON c.Id = p.categoryId " +
                                     $"GROUP BY CategoryName HAVING COUNT(*) > {param};";
+            ExecuteQuery(query);
+        }
+
+        private static List<Category> ExecuteQuery(string query)
+        {
+            List<Category> categories = new List<Category>();
             try
             {
-                using (SqlConnection connection = new SqlConnection(DAL.Connection_String))
+                using (SqlConnection connection = new SqlConnection(DataAccessLayer.Connection_String))
                 {
                     connection.Open();
 
-                    SqlCommand sqlCommand = new SqlCommand(command, connection);
-
-                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
-                    {
-                        ReadCategorysFromDataReader(reader);
-                    }
+                    SqlCommand command = new SqlCommand(query, connection);
+                    categories = ReadCategoryFromDataReader(command.ExecuteReader());
                 }
             }
             catch (SqlException ex)
@@ -152,32 +95,41 @@ namespace Supermarket
                 Console.WriteLine($"Something went wrong while reading products. {ex.Message}.");
             }
 
+            return categories;
         }
 
-        private static void ReadCategorysFromDataReader(SqlDataReader reader)
+        private static List<Category> ReadCategoryFromDataReader(SqlDataReader reader)
         {
-            if (reader is null)
+            List<Category> categories = new List<Category>();
+            if (reader == null)
             {
-                return;
+                return categories;
             }
 
-            if (reader.HasRows)
+            if (!reader.HasRows)
             {
-                Console.WriteLine("{0}\t{1}",
+                Console.WriteLine("No data.");
+                return categories;
+            }
+
+            Console.WriteLine("{0}\t{1}",
                     reader.GetName(0),
                     reader.GetName(1));
-;
+                    
 
-                while (reader.Read())
-                {
-                    object id = reader.GetValue(0);
-                    object name = reader.GetValue(1);
-              
+            while (reader.Read())
+            {
+                int id = reader.GetInt32(0);
+                string name = reader.GetString(1);
+               
 
-                    Console.WriteLine("{0} \t{1} ", id, name);
-                }
-                reader.Close();
+                categories.Add(new Category(id, name));
+
+                Console.WriteLine("{0} \t{1}", id, name);
             }
+            reader.Close();
+
+            return categories;
         }
     }
 }

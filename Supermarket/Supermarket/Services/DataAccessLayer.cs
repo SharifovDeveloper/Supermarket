@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace Supermarket
 {
-    internal class DAL
+    internal class DataAccessLayer
     {
         public const string Connection_String = "Data Source=DESKTOP-B7KIDHK\\SQLEXPRESS02;Initial Catalog=Supermarket;Integrated Security=True";
 
@@ -14,7 +14,6 @@ namespace Supermarket
             try
             {
                 connection.Open();
-                Console.WriteLine("Connection was successfull.");
 
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
 
@@ -33,7 +32,34 @@ namespace Supermarket
             finally
             {
                 connection.Close();
-                Console.WriteLine("Connection closed.");
+            }
+        }
+
+        public static void ExecuteQuery(string query, Action<SqlDataReader> dataReader)
+        {
+            SqlConnection connection = new SqlConnection(Connection_String);
+
+            try
+            {
+                connection.Open();
+
+                SqlCommand sqlCommand = new SqlCommand(query, connection);
+
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                dataReader(reader);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Something went wrong while reading products. {ex.Message}.");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }
